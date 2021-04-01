@@ -45,7 +45,7 @@ public:
 		std::unique_lock < std::mutex > lock(m_mutex);
 
 		m_condition_variable.wait(lock, [this] {return !m_queue.empty(); });
-		auto result = std::make_shared < T > (m_queue.front());
+		auto result = std::make_shared < T > (m_queue.top());
 		m_queue.pop();
 
 		return result;
@@ -60,7 +60,7 @@ public:
 			return false;
 		}
 
-		value = m_queue.front();
+		value = m_queue.top();
 		m_queue.pop();
 
 		return true;
@@ -89,7 +89,7 @@ public:
 
 private:
 
-	std::queue < T >		m_queue;
+	std::priority_queue < T >		m_queue;
 	std::condition_variable m_condition_variable;
 
 private:
